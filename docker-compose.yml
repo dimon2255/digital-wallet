@@ -1,0 +1,23 @@
+services:
+  bitcoind-regtest:
+    image: kylemanna/bitcoind
+    command: >
+      -regtest
+      -server
+      -rpcuser=testuser
+      -rpcpassword=testpass
+      -rpcallowip=0.0.0.0/0
+      -rpcbind=0.0.0.0
+      -txindex=1
+      -fallbackfee=0.00001
+    ports:
+      - "18443:18443"
+
+  postgres:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: btcpayments
+      POSTGRES_USER: app
+      POSTGRES_PASSWORD: testpass
+    ports:
+      - "5432:5432"
