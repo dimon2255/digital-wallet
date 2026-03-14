@@ -13,7 +13,7 @@ public sealed class AppDbContextFactory : IDesignTimeDbContextFactory<AppDbConte
     {
         var optionsBuilder = new DbContextOptionsBuilder<AppDbContext>();
         var connectionString = Environment.GetEnvironmentVariable("BITCOIN_PAYMENTS_CONNECTION_STRING")
-                               ?? "Host=localhost;Port=5432;Database=btcpayments;Username=app;Password=testpass";
+                               ?? "Host=localhost;Port=5432;Database=btc-payments;Username=postgres;Password=password";
 
         optionsBuilder.UseNpgsql(connectionString);
         return new AppDbContext(optionsBuilder.Options);
