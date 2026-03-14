@@ -6,20 +6,25 @@ on:
   pull_request:
     branches: [main]
 
+permissions:
+  contents: read
+  checks: write
+
 env:
   DOTNET_VERSION: '10.0.x'
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
   DOTNET_CLI_TELEMETRY_OPTOUT: true
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Setup .NET
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@v5
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
 
@@ -29,24 +34,15 @@ jobs:
       - name: Build
         run: dotnet build BitcoinPayments.sln --no-restore --configuration Release
 
-      - name: Upload build artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: build-output
-          path: |
-            src/**/bin/Release/
-            tests/**/bin/Release/
-          retention-days: 1
-
   unit-tests:
     name: Unit Tests
     runs-on: ubuntu-latest
     needs: build
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Setup .NET
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@v5
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
 
@@ -55,24 +51,24 @@ jobs:
           dotnet test tests/BitcoinPayments.UnitTests
           --configuration Release
           --logger "trx;LogFileName=unit-results.trx"
-          --collect:"XPlat Code Coverage"
 
-      - name: Upload test results
-        uses: actions/upload-artifact@v4
+      - name: Report unit test results
+        uses: dorny/test-reporter@v2
         if: always()
         with:
-          name: unit-test-results
-          path: tests/BitcoinPayments.UnitTests/TestResults/
+          name: Unit Test Results
+          path: tests/BitcoinPayments.UnitTests/TestResults/unit-results.trx
+          reporter: dotnet-trx
 
   integration-tests:
     name: Integration Tests
     runs-on: ubuntu-latest
     needs: build
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Setup .NET
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@v5
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
 
@@ -82,22 +78,23 @@ jobs:
           --configuration Release
           --logger "trx;LogFileName=integration-results.trx"
 
-      - name: Upload test results
-        uses: actions/upload-artifact@v4
+      - name: Report integration test results
+        uses: dorny/test-reporter@v2
         if: always()
         with:
-          name: integration-test-results
-          path: tests/BitcoinPayments.IntegrationTests/TestResults/
+          name: Integration Test Results
+          path: tests/BitcoinPayments.IntegrationTests/TestResults/integration-results.trx
+          reporter: dotnet-trx
 
   e2e-tests:
     name: E2E Tests
     runs-on: ubuntu-latest
     needs: build
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Setup .NET
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@v5
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
 
@@ -107,9 +104,10 @@ jobs:
           --configuration Release
           --logger "trx;LogFileName=e2e-results.trx"
 
-      - name: Upload test results
-        uses: actions/upload-artifact@v4
+      - name: Report E2E test results
+        uses: dorny/test-reporter@v2
         if: always()
         with:
-          name: e2e-test-results
-          path: tests/BitcoinPayments.EndToEndTests/TestResults/
+          name: E2E Test Results
+          path: tests/BitcoinPayments.EndToEndTests/TestResults/e2e-results.trx
+          reporter: dotnet-trx
