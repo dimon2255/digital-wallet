@@ -69,8 +69,7 @@ public sealed class UtxoRepository : IUtxoRepository
     public async Task<IReadOnlyCollection<Utxo>> GetUnspentByWalletIdAsync(Guid walletId, CancellationToken cancellationToken) =>
         await dbContext.Utxos
             .Where(utxo => utxo.WalletId == walletId && !utxo.IsSpent)
-            .OrderByDescending(utxo => utxo.Amount.Satoshis)
-            .ThenByDescending(utxo => utxo.ConfirmationCount)
+            .OrderByDescending(utxo => utxo.ConfirmationCount)
             .ToListAsync(cancellationToken);
 
     /// <inheritdoc />
