@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace BitcoinPayments.Infrastructure.Persistence.Migrations
+namespace BitcoinPayments.Infrastructure.Migrations
 {
     /// <inheritdoc />
     public partial class InitialCreate : Migration
@@ -11,8 +11,12 @@ namespace BitcoinPayments.Infrastructure.Persistence.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.EnsureSchema(
+                name: "payments");
+
             migrationBuilder.CreateTable(
                 name: "escrows",
+                schema: "payments",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
@@ -39,6 +43,7 @@ namespace BitcoinPayments.Infrastructure.Persistence.Migrations
 
             migrationBuilder.CreateTable(
                 name: "idempotency_keys",
+                schema: "payments",
                 columns: table => new
                 {
                     key = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
@@ -54,6 +59,7 @@ namespace BitcoinPayments.Infrastructure.Persistence.Migrations
 
             migrationBuilder.CreateTable(
                 name: "payment_transactions",
+                schema: "payments",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
@@ -80,6 +86,7 @@ namespace BitcoinPayments.Infrastructure.Persistence.Migrations
 
             migrationBuilder.CreateTable(
                 name: "utxos",
+                schema: "payments",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
@@ -104,6 +111,7 @@ namespace BitcoinPayments.Infrastructure.Persistence.Migrations
 
             migrationBuilder.CreateTable(
                 name: "wallets",
+                schema: "payments",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
@@ -122,37 +130,44 @@ namespace BitcoinPayments.Infrastructure.Persistence.Migrations
 
             migrationBuilder.CreateIndex(
                 name: "idx_idempotency_expires",
+                schema: "payments",
                 table: "idempotency_keys",
                 column: "expires_at");
 
             migrationBuilder.CreateIndex(
                 name: "idx_payment_tx_bitcoin_txid",
+                schema: "payments",
                 table: "payment_transactions",
                 column: "bitcoin_tx_id");
 
             migrationBuilder.CreateIndex(
                 name: "idx_payment_tx_parent",
+                schema: "payments",
                 table: "payment_transactions",
                 column: "parent_transaction_id");
 
             migrationBuilder.CreateIndex(
                 name: "idx_payment_tx_state",
+                schema: "payments",
                 table: "payment_transactions",
                 column: "state");
 
             migrationBuilder.CreateIndex(
                 name: "IX_payment_transactions_idempotency_key",
+                schema: "payments",
                 table: "payment_transactions",
                 column: "idempotency_key",
                 unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "idx_utxos_wallet_unspent",
+                schema: "payments",
                 table: "utxos",
                 columns: new[] { "wallet_id", "is_spent" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_utxos_transaction_id_output_index",
+                schema: "payments",
                 table: "utxos",
                 columns: new[] { "transaction_id", "output_index" },
                 unique: true);
@@ -162,19 +177,24 @@ namespace BitcoinPayments.Infrastructure.Persistence.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "escrows");
+                name: "escrows",
+                schema: "payments");
 
             migrationBuilder.DropTable(
-                name: "idempotency_keys");
+                name: "idempotency_keys",
+                schema: "payments");
 
             migrationBuilder.DropTable(
-                name: "payment_transactions");
+                name: "payment_transactions",
+                schema: "payments");
 
             migrationBuilder.DropTable(
-                name: "utxos");
+                name: "utxos",
+                schema: "payments");
 
             migrationBuilder.DropTable(
-                name: "wallets");
+                name: "wallets",
+                schema: "payments");
         }
     }
 }

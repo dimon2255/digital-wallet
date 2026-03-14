@@ -29,14 +29,7 @@ using (var scope = app.Services.CreateScope())
     NetworkGuard.EnsureTestnet(options);
 
     var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-    if (dbContext.Database.GetMigrations().Any())
-    {
-        await dbContext.Database.MigrateAsync();
-    }
-    else
-    {
-        await dbContext.Database.EnsureCreatedAsync();
-    }
+    await dbContext.Database.MigrateAsync();
 }
 
 app.UseSerilogRequestLogging();

@@ -44,6 +44,7 @@ public sealed class AppDbContext : DbContext
     /// <inheritdoc />
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.HasDefaultSchema("payments");
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
     }
 }

@@ -8,7 +8,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace BitcoinPayments.Infrastructure.Persistence.Migrations
+namespace BitcoinPayments.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
     partial class AppDbContextModelSnapshot : ModelSnapshot
@@ -17,7 +17,8 @@ namespace BitcoinPayments.Infrastructure.Persistence.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.11")
+                .HasDefaultSchema("payments")
+                .HasAnnotation("ProductVersion", "10.0.5")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -99,7 +100,7 @@ namespace BitcoinPayments.Infrastructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("escrows", (string)null);
+                    b.ToTable("escrows", "payments");
                 });
 
             modelBuilder.Entity("BitcoinPayments.Domain.Entities.IdempotencyKeyRecord", b =>
@@ -131,7 +132,7 @@ namespace BitcoinPayments.Infrastructure.Persistence.Migrations
                     b.HasIndex("ExpiresAt")
                         .HasDatabaseName("idx_idempotency_expires");
 
-                    b.ToTable("idempotency_keys", (string)null);
+                    b.ToTable("idempotency_keys", "payments");
                 });
 
             modelBuilder.Entity("BitcoinPayments.Domain.Entities.PaymentTransaction", b =>
@@ -221,7 +222,7 @@ namespace BitcoinPayments.Infrastructure.Persistence.Migrations
                     b.HasIndex("State")
                         .HasDatabaseName("idx_payment_tx_state");
 
-                    b.ToTable("payment_transactions", (string)null);
+                    b.ToTable("payment_transactions", "payments");
                 });
 
             modelBuilder.Entity("BitcoinPayments.Domain.Entities.Utxo", b =>
@@ -295,7 +296,7 @@ namespace BitcoinPayments.Infrastructure.Persistence.Migrations
                     b.HasIndex("WalletId", "IsSpent")
                         .HasDatabaseName("idx_utxos_wallet_unspent");
 
-                    b.ToTable("utxos", (string)null);
+                    b.ToTable("utxos", "payments");
                 });
 
             modelBuilder.Entity("BitcoinPayments.Domain.Entities.Wallet", b =>
@@ -339,7 +340,7 @@ namespace BitcoinPayments.Infrastructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("wallets", (string)null);
+                    b.ToTable("wallets", "payments");
                 });
 #pragma warning restore 612, 618
         }
