@@ -64,3 +64,8 @@ docker-compose.override.yml
 ## SPA
 src/BitcoinPayments.UI/node_modules/
 src/BitcoinPayments.UI/dist/
+
+## Playwright screenshots
+transactions-table*.png
+page-*.png
+page-*.jpeg

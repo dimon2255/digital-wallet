@@ -43,7 +43,9 @@ public sealed class PaymentQueryService : IPaymentQueryService
                 settings.BuildExplorerUrl(transaction.BitcoinTxId?.Value),
                 transaction.CreatedAt,
                 transaction.UpdatedAt,
-                transaction.ErrorMessage);
+                transaction.ErrorMessage,
+                transaction.BuyerWalletId,
+                transaction.MerchantWalletId);
     }
 
     /// <inheritdoc />
@@ -70,7 +72,9 @@ public sealed class PaymentQueryService : IPaymentQueryService
                 settings.BuildExplorerUrl(transaction.BitcoinTxId?.Value),
                 transaction.CreatedAt,
                 transaction.UpdatedAt,
-                transaction.ErrorMessage))
+                transaction.ErrorMessage,
+                transaction.BuyerWalletId,
+                transaction.MerchantWalletId))
             .ToArray();
     }
 
@@ -100,7 +104,9 @@ public sealed class PaymentQueryService : IPaymentQueryService
                 settings.BuildExplorerUrl(t.BitcoinTxId?.Value),
                 t.CreatedAt,
                 t.UpdatedAt,
-                t.ErrorMessage))
+                t.ErrorMessage,
+                t.BuyerWalletId,
+                t.MerchantWalletId))
             .ToArray();
 
         return new PagedResult<TransactionStatusResponse>(responses, totalCount, page, pageSize);

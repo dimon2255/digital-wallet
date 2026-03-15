@@ -1,0 +1,23 @@
+{
+  "generatedAt": "2026-03-15T22:30:00Z",
+  "sourceCommit": "3718dc7",
+  "ecosystem": "C# / .NET 10.0 + TypeScript / React 19",
+  "ownedFiles": [
+    "docs/01-system-context.md",
+    "docs/02-containers.md",
+    "docs/03-components/domain.md",
+    "docs/03-components/application.md",
+    "docs/03-components/infrastructure.md",
+    "docs/03-components/api.md",
+    "docs/03-components/frontend.md",
+    "docs/04-data-flow.md",
+    "docs/05-development-guide.md"
+  ],
+  "modules": {
+    "BitcoinPayments.Domain": "3718dc7",
+    "BitcoinPayments.Application": "3718dc7",
+    "BitcoinPayments.Infrastructure": "3718dc7",
+    "BitcoinPayments.API": "3718dc7",
+    "BitcoinPayments.UI": "3718dc7"
+  }
+}
