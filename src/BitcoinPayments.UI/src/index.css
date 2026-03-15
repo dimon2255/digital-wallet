@@ -1,8 +1,10 @@
 @import "tailwindcss";
 
 @theme {
+  /* — Neutrals (zinc) — */
   --color-zinc-950: #09090b;
   --color-zinc-900: #18181b;
+  --color-zinc-850: #1e1e22;
   --color-zinc-800: #27272a;
   --color-zinc-700: #3f3f46;
   --color-zinc-600: #52525b;
@@ -11,31 +13,47 @@
   --color-zinc-300: #d4d4d8;
   --color-zinc-200: #e4e4e7;
   --color-zinc-100: #f4f4f5;
+
+  /* — Primary accent (amber) — */
+  --color-amber-700: #b45309;
+  --color-amber-600: #d97706;
   --color-amber-500: #f59e0b;
   --color-amber-400: #fbbf24;
-  --color-amber-600: #d97706;
+  --color-amber-300: #fcd34d;
+
+  /* — Secondary accent (orange) — */
   --color-orange-500: #f97316;
+  --color-orange-400: #fb923c;
+
+  /* — State colors — */
   --color-green-500: #22c55e;
   --color-green-400: #4ade80;
   --color-red-500: #ef4444;
   --color-red-400: #f87171;
   --color-blue-500: #3b82f6;
   --color-blue-400: #60a5fa;
+
+  /* — Font families — */
+  --font-display: 'Outfit', sans-serif;
+  --font-body: 'Plus Jakarta Sans', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
 }
 
+/* ——— Base ——— */
 body {
   margin: 0;
   background: var(--color-zinc-950);
   color: var(--color-zinc-300);
-  font-family: system-ui, -apple-system, sans-serif;
+  font-family: var(--font-body);
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 #root {
   min-height: 100vh;
 }
 
-/* Scrollbar */
+/* ——— Scrollbar ——— */
 ::-webkit-scrollbar {
   width: 6px;
 }
@@ -45,4 +63,189 @@ body {
 ::-webkit-scrollbar-thumb {
   background: var(--color-zinc-700);
   border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-zinc-600);
+}
+
+/* ——— Noise texture overlay ——— */
+.noise-overlay {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 50;
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 256px 256px;
+}
+
+/* ——— Background atmosphere ——— */
+.bg-vault {
+  position: relative;
+  background:
+    radial-gradient(ellipse 80% 60% at 10% 90%, rgba(245, 158, 11, 0.06) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 50% at 90% 10%, rgba(249, 115, 22, 0.04) 0%, transparent 50%),
+    var(--color-zinc-950);
+}
+
+/* ——— Glass card ——— */
+.glass-card {
+  background: rgba(24, 24, 27, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(63, 63, 70, 0.5);
+  border-radius: 16px;
+}
+
+.glass-card-solid {
+  background: var(--color-zinc-900);
+  border: 1px solid var(--color-zinc-800);
+  border-radius: 16px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.glass-card-solid:hover {
+  border-color: var(--color-zinc-700);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2);
+}
+
+/* ——— Amber glow effects ——— */
+.glow-amber {
+  box-shadow:
+    0 0 20px rgba(245, 158, 11, 0.15),
+    0 0 60px rgba(245, 158, 11, 0.05);
+}
+
+.glow-amber-sm {
+  box-shadow: 0 0 12px rgba(245, 158, 11, 0.1);
+}
+
+.btn-glow {
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+.btn-glow:hover {
+  box-shadow:
+    0 0 20px rgba(245, 158, 11, 0.25),
+    0 0 40px rgba(245, 158, 11, 0.1);
+  transform: translateY(-1px);
+}
+
+.btn-glow:active {
+  transform: translateY(0);
+}
+
+/* ——— Gradient border utility ——— */
+.gradient-border {
+  position: relative;
+}
+
+.gradient-border::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 16px;
+  padding: 1px;
+  background: linear-gradient(
+    135deg,
+    rgba(245, 158, 11, 0.3) 0%,
+    rgba(63, 63, 70, 0.3) 50%,
+    rgba(249, 115, 22, 0.2) 100%
+  );
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  -webkit-mask-composite: xor;
+  pointer-events: none;
+}
+
+/* ——— Keyframe animations ——— */
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slide-in-left {
+  from {
+    opacity: 0;
+    transform: translateX(-16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 0 16px rgba(245, 158, 11, 0.15);
+  }
+  50% {
+    box-shadow: 0 0 24px rgba(245, 158, 11, 0.3);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+/* Animation utility classes */
+.animate-fade-up {
+  animation: fade-up 0.5s ease-out both;
+}
+
+.animate-fade-in {
+  animation: fade-in 0.4s ease-out both;
+}
+
+.animate-slide-in-left {
+  animation: slide-in-left 0.4s ease-out both;
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 3s ease-in-out infinite;
+}
+
+/* Stagger delays */
+.delay-1 { animation-delay: 0.05s; }
+.delay-2 { animation-delay: 0.1s; }
+.delay-3 { animation-delay: 0.15s; }
+.delay-4 { animation-delay: 0.2s; }
+.delay-5 { animation-delay: 0.25s; }
+.delay-6 { animation-delay: 0.3s; }
+
+/* ——— Skeleton loading ——— */
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--color-zinc-800) 25%,
+    var(--color-zinc-700) 50%,
+    var(--color-zinc-800) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s ease-in-out infinite;
+  border-radius: 8px;
+}
+
+/* ——— Selection ——— */
+::selection {
+  background: rgba(245, 158, 11, 0.3);
+  color: var(--color-zinc-100);
 }
