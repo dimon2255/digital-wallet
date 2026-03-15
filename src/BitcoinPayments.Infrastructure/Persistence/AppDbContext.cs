@@ -1,4 +1,6 @@
 using BitcoinPayments.Domain.Entities;
+using BitcoinPayments.Infrastructure.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace BitcoinPayments.Infrastructure.Persistence;
@@ -6,7 +8,7 @@ namespace BitcoinPayments.Infrastructure.Persistence;
 /// <summary>
 /// Entity Framework database context for the platform.
 /// </summary>
-public sealed class AppDbContext : DbContext
+public class AppDbContext : IdentityDbContext<ApplicationUser>
 {
     /// <summary>
     /// Initializes a new instance of the <see cref="AppDbContext"/> class.
@@ -41,9 +43,15 @@ public sealed class AppDbContext : DbContext
     /// </summary>
     public DbSet<IdempotencyKeyRecord> IdempotencyKeys => Set<IdempotencyKeyRecord>();
 
+    /// <summary>
+    /// Gets the refresh tokens set.
+    /// </summary>
+    public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();
+
     /// <inheritdoc />
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        base.OnModelCreating(modelBuilder);
         modelBuilder.HasDefaultSchema("payments");
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
     }

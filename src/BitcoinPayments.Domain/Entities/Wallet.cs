@@ -57,6 +57,11 @@ public class Wallet
     public int CurrentChangeIndex { get; set; }
 
     /// <summary>
+    /// Gets or sets the owning user identifier.
+    /// </summary>
+    public string? UserId { get; set; }
+
+    /// <summary>
     /// Gets or sets the configured network name.
     /// </summary>
     public string Network { get; set; } = "testnet4";

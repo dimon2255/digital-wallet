@@ -26,6 +26,11 @@ public interface IBitcoinSettings
     int MinConfirmationsForSettlement { get; }
 
     /// <summary>
+    /// Gets the transfer mode (auto, onchain, internal).
+    /// </summary>
+    string TransferMode { get; }
+
+    /// <summary>
     /// Builds an explorer URL for a transaction.
     /// </summary>
     /// <param name="transactionId">The transaction id string.</param>

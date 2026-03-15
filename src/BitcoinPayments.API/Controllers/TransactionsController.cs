@@ -1,5 +1,7 @@
+using System.Security.Claims;
 using BitcoinPayments.Application.Abstractions;
 using BitcoinPayments.Application.DTOs;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BitcoinPayments.API.Controllers;
@@ -9,6 +11,7 @@ namespace BitcoinPayments.API.Controllers;
 /// </summary>
 [ApiController]
 [Route("api/v1/transactions")]
+[Authorize]
 public sealed class TransactionsController : ControllerBase
 {
     private readonly IPaymentQueryService paymentQueryService;
@@ -19,6 +22,21 @@ public sealed class TransactionsController : ControllerBase
     public TransactionsController(IPaymentQueryService paymentQueryService)
     {
         this.paymentQueryService = paymentQueryService;
+    }
+
+    /// <summary>
+    /// Lists transactions for the authenticated user with pagination.
+    /// </summary>
+    [HttpGet]
+    [ProducesResponseType(typeof(PagedResult<TransactionStatusResponse>), StatusCodes.Status200OK)]
+    public Task<PagedResult<TransactionStatusResponse>> ListAsync(
+        [FromQuery] int page = 1,
+        [FromQuery] int pageSize = 10,
+        CancellationToken cancellationToken = default)
+    {
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier)
+            ?? throw new UnauthorizedAccessException("User identity not found.");
+        return paymentQueryService.ListByUserAsync(userId, page, pageSize, cancellationToken);
     }
 
     /// <summary>

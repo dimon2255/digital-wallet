@@ -20,6 +20,12 @@ public sealed class WalletConfiguration : IEntityTypeConfiguration<Wallet>
             .HasMaxLength(100)
             .IsRequired();
 
+        builder.Property(wallet => wallet.UserId)
+            .HasColumnName("user_id")
+            .HasMaxLength(450);
+
+        builder.HasIndex(wallet => wallet.UserId);
+
         builder.Property(wallet => wallet.EncryptedMasterKey)
             .HasColumnName("encrypted_master_key")
             .IsRequired();

@@ -39,6 +39,13 @@ public sealed class WalletRepository : IWalletRepository
         await dbContext.Wallets.OrderBy(wallet => wallet.Name).ToListAsync(cancellationToken);
 
     /// <inheritdoc />
+    public async Task<IReadOnlyCollection<Wallet>> ListByUserIdAsync(string userId, CancellationToken cancellationToken) =>
+        await dbContext.Wallets
+            .Where(wallet => wallet.UserId == userId)
+            .OrderBy(wallet => wallet.Name)
+            .ToListAsync(cancellationToken);
+
+    /// <inheritdoc />
     public async Task UpdateAsync(Wallet wallet, CancellationToken cancellationToken)
     {
         dbContext.Wallets.Update(wallet);

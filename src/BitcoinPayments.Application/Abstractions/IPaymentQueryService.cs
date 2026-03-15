@@ -16,4 +16,9 @@ public interface IPaymentQueryService
     /// Gets a payment and its related child operations.
     /// </summary>
     Task<IReadOnlyCollection<TransactionStatusResponse>> GetHistoryAsync(Guid id, CancellationToken cancellationToken);
+
+    /// <summary>
+    /// Lists transactions for a user with pagination.
+    /// </summary>
+    Task<PagedResult<TransactionStatusResponse>> ListByUserAsync(string userId, int page, int pageSize, CancellationToken cancellationToken);
 }

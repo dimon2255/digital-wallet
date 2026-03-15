@@ -1,5 +1,6 @@
 using BitcoinPayments.Application.Abstractions;
 using BitcoinPayments.Application.Services;
+using BitcoinPayments.Application.Services.Transfers;
 using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
@@ -28,6 +29,11 @@ public static class ServiceCollectionExtensions
         services.AddScoped<WalletSynchronizationService>();
         services.AddScoped<IWalletApplicationService, WalletApplicationService>();
         services.AddScoped<IPaymentQueryService, PaymentQueryService>();
+
+        // Transfer services
+        services.AddScoped<InternalLedgerStrategy>();
+        services.AddScoped<OnChainTransferStrategy>();
+        services.AddScoped<TransferStrategyResolver>();
 
         return services;
     }

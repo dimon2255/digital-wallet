@@ -1,3 +1,5 @@
+using BitcoinPayments.Domain.Entities;
+using BitcoinPayments.Infrastructure.Identity;
 using BitcoinPayments.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 
@@ -14,10 +16,12 @@ public sealed class AppDbContextModelTests
 
         using var dbContext = new AppDbContext(options);
 
-        Assert.NotNull(dbContext.Model.FindEntityType(typeof(BitcoinPayments.Domain.Entities.Wallet)));
-        Assert.NotNull(dbContext.Model.FindEntityType(typeof(BitcoinPayments.Domain.Entities.PaymentTransaction)));
-        Assert.NotNull(dbContext.Model.FindEntityType(typeof(BitcoinPayments.Domain.Entities.Escrow)));
-        Assert.NotNull(dbContext.Model.FindEntityType(typeof(BitcoinPayments.Domain.Entities.Utxo)));
-        Assert.NotNull(dbContext.Model.FindEntityType(typeof(BitcoinPayments.Domain.Entities.IdempotencyKeyRecord)));
+        Assert.NotNull(dbContext.Model.FindEntityType(typeof(Wallet)));
+        Assert.NotNull(dbContext.Model.FindEntityType(typeof(PaymentTransaction)));
+        Assert.NotNull(dbContext.Model.FindEntityType(typeof(Escrow)));
+        Assert.NotNull(dbContext.Model.FindEntityType(typeof(Utxo)));
+        Assert.NotNull(dbContext.Model.FindEntityType(typeof(IdempotencyKeyRecord)));
+        Assert.NotNull(dbContext.Model.FindEntityType(typeof(ApplicationUser)));
+        Assert.NotNull(dbContext.Model.FindEntityType(typeof(RefreshToken)));
     }
 }
