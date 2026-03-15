@@ -33,6 +33,13 @@ public sealed class IdempotencyMiddleware
             return;
         }
 
+        // Skip idempotency for auth endpoints
+        if (context.Request.Path.StartsWithSegments("/api/v1/accounts"))
+        {
+            await next(context);
+            return;
+        }
+
         if (!context.Request.Headers.TryGetValue("Idempotency-Key", out var values) || string.IsNullOrWhiteSpace(values))
         {
             context.Response.StatusCode = StatusCodes.Status400BadRequest;

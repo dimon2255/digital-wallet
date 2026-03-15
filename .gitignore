@@ -60,3 +60,7 @@ _bmad-output/
 
 ## Docker
 docker-compose.override.yml
+
+## SPA
+src/BitcoinPayments.UI/node_modules/
+src/BitcoinPayments.UI/dist/

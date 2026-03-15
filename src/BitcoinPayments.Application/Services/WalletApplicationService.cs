@@ -40,17 +40,24 @@ public sealed class WalletApplicationService : IWalletApplicationService
     }
 
     /// <inheritdoc />
-    public async Task<WalletResponse> CreateWalletAsync(string name, CancellationToken cancellationToken)
+    public async Task<WalletResponse> CreateWalletAsync(string name, string? userId, CancellationToken cancellationToken)
     {
         var wallet = walletKeyService.CreateWallet(name, settings.Network);
+        wallet.UserId = userId;
         await walletRepository.AddAsync(wallet, cancellationToken);
         return new WalletResponse(wallet.Id, wallet.Name, wallet.Network, 0L, wallet.CurrentReceivingIndex, wallet.CurrentChangeIndex, wallet.CreatedAt);
     }
 
     /// <inheritdoc />
-    public async Task<WalletResponse> GetWalletAsync(Guid walletId, CancellationToken cancellationToken)
+    public async Task<WalletResponse> GetWalletAsync(Guid walletId, string? userId, CancellationToken cancellationToken)
     {
         var wallet = await GetRequiredWalletAsync(walletId, cancellationToken);
+
+        if (userId is not null && wallet.UserId is not null && wallet.UserId != userId)
+        {
+            throw new ForbiddenAccessException($"Wallet '{walletId}' does not belong to the current user.");
+        }
+
         await walletSynchronizationService.SynchronizeAsync(wallet, cancellationToken);
         var utxos = await utxoRepository.GetUnspentByWalletIdAsync(walletId, cancellationToken);
         return new WalletResponse(
@@ -61,6 +68,28 @@ public sealed class WalletApplicationService : IWalletApplicationService
             wallet.CurrentReceivingIndex,
             wallet.CurrentChangeIndex,
             wallet.CreatedAt);
+    }
+
+    /// <inheritdoc />
+    public async Task<IReadOnlyCollection<WalletResponse>> ListWalletsAsync(string userId, CancellationToken cancellationToken)
+    {
+        var wallets = await walletRepository.ListByUserIdAsync(userId, cancellationToken);
+        var results = new List<WalletResponse>(wallets.Count);
+
+        foreach (var wallet in wallets)
+        {
+            var utxos = await utxoRepository.GetUnspentByWalletIdAsync(wallet.Id, cancellationToken);
+            results.Add(new WalletResponse(
+                wallet.Id,
+                wallet.Name,
+                wallet.Network,
+                utxos.Sum(u => u.Amount.Satoshis),
+                wallet.CurrentReceivingIndex,
+                wallet.CurrentChangeIndex,
+                wallet.CreatedAt));
+        }
+
+        return results;
     }
 
     /// <inheritdoc />

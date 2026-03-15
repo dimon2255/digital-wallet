@@ -10,14 +10,19 @@ namespace BitcoinPayments.Application.Services;
 public sealed class PaymentQueryService : IPaymentQueryService
 {
     private readonly ITransactionRepository transactionRepository;
+    private readonly IWalletRepository walletRepository;
     private readonly IBitcoinSettings settings;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="PaymentQueryService"/> class.
     /// </summary>
-    public PaymentQueryService(ITransactionRepository transactionRepository, IBitcoinSettings settings)
+    public PaymentQueryService(
+        ITransactionRepository transactionRepository,
+        IWalletRepository walletRepository,
+        IBitcoinSettings settings)
     {
         this.transactionRepository = transactionRepository;
+        this.walletRepository = walletRepository;
         this.settings = settings;
     }
 
@@ -67,5 +72,37 @@ public sealed class PaymentQueryService : IPaymentQueryService
                 transaction.UpdatedAt,
                 transaction.ErrorMessage))
             .ToArray();
+    }
+
+    /// <inheritdoc />
+    public async Task<PagedResult<TransactionStatusResponse>> ListByUserAsync(
+        string userId, int page, int pageSize, CancellationToken cancellationToken)
+    {
+        var wallets = await walletRepository.ListByUserIdAsync(userId, cancellationToken);
+        var walletIds = wallets.Select(w => w.Id).ToArray();
+
+        if (walletIds.Length == 0)
+        {
+            return new PagedResult<TransactionStatusResponse>([], 0, page, pageSize);
+        }
+
+        var (items, totalCount) = await transactionRepository.ListByWalletIdsAsync(walletIds, page, pageSize, cancellationToken);
+
+        var responses = items
+            .Select(t => new TransactionStatusResponse(
+                t.Id,
+                t.OperationType.ToString().ToLowerInvariant(),
+                t.State.ToString().ToLowerInvariant(),
+                t.Amount.Satoshis,
+                t.Fee?.Satoshis,
+                t.BitcoinTxId?.Value,
+                t.ConfirmationCount,
+                settings.BuildExplorerUrl(t.BitcoinTxId?.Value),
+                t.CreatedAt,
+                t.UpdatedAt,
+                t.ErrorMessage))
+            .ToArray();
+
+        return new PagedResult<TransactionStatusResponse>(responses, totalCount, page, pageSize);
     }
 }

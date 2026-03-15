@@ -34,6 +34,8 @@ public sealed class ExceptionHandlingMiddleware
 
             var (statusCode, errorCode) = exception switch
             {
+                UnauthorizedAccessException => (StatusCodes.Status401Unauthorized, "UNAUTHORIZED"),
+                ForbiddenAccessException => (StatusCodes.Status403Forbidden, "FORBIDDEN"),
                 InsufficientFundsException => (StatusCodes.Status400BadRequest, "INSUFFICIENT_FUNDS"),
                 EscrowNotFoundException => (StatusCodes.Status404NotFound, "ESCROW_NOT_FOUND"),
                 InvalidOperationStateException => (StatusCodes.Status409Conflict, "INVALID_OPERATION_STATE"),

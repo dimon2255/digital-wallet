@@ -28,6 +28,11 @@ public interface IWalletRepository
     Task<IReadOnlyCollection<Wallet>> ListAsync(CancellationToken cancellationToken);
 
     /// <summary>
+    /// Lists wallets belonging to a user.
+    /// </summary>
+    Task<IReadOnlyCollection<Wallet>> ListByUserIdAsync(string userId, CancellationToken cancellationToken);
+
+    /// <summary>
     /// Updates a wallet.
     /// </summary>
     Task UpdateAsync(Wallet wallet, CancellationToken cancellationToken);

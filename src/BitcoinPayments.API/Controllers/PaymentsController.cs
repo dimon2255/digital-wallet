@@ -3,6 +3,7 @@ using BitcoinPayments.Application.Abstractions;
 using BitcoinPayments.Application.Commands;
 using BitcoinPayments.Application.DTOs;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BitcoinPayments.API.Controllers;
@@ -12,6 +13,7 @@ namespace BitcoinPayments.API.Controllers;
 /// </summary>
 [ApiController]
 [Route("api/v1/payments")]
+[Authorize]
 public sealed class PaymentsController : ControllerBase
 {
     private readonly ISender sender;

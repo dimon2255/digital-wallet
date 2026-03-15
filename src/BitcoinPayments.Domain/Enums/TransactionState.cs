@@ -79,4 +79,9 @@ public enum TransactionState
     /// Terminal failure state.
     /// </summary>
     Failed = 15,
+
+    /// <summary>
+    /// Completed internal ledger transfer.
+    /// </summary>
+    TransferCompleted = 16,
 }

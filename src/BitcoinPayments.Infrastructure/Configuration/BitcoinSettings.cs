@@ -31,6 +31,9 @@ public sealed class BitcoinSettings : IBitcoinSettings
     public int MinConfirmationsForSettlement => options.MinConfirmationsForSettlement;
 
     /// <inheritdoc />
+    public string TransferMode => options.TransferMode;
+
+    /// <inheritdoc />
     public string? BuildExplorerUrl(string? transactionId)
     {
         if (string.IsNullOrWhiteSpace(transactionId))

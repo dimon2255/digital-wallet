@@ -55,6 +55,26 @@ public sealed class TransactionRepository : ITransactionRepository
             .ToListAsync(cancellationToken);
 
     /// <inheritdoc />
+    public async Task<(IReadOnlyCollection<PaymentTransaction> Items, int TotalCount)> ListByWalletIdsAsync(
+        IReadOnlyCollection<Guid> walletIds,
+        int page,
+        int pageSize,
+        CancellationToken cancellationToken)
+    {
+        var query = dbContext.PaymentTransactions
+            .Where(t => walletIds.Contains(t.BuyerWalletId) || walletIds.Contains(t.MerchantWalletId));
+
+        var totalCount = await query.CountAsync(cancellationToken);
+        var items = await query
+            .OrderByDescending(t => t.CreatedAt)
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
+            .ToListAsync(cancellationToken);
+
+        return (items, totalCount);
+    }
+
+    /// <inheritdoc />
     public async Task UpdateAsync(PaymentTransaction transaction, CancellationToken cancellationToken)
     {
         dbContext.PaymentTransactions.Update(transaction);

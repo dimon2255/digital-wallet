@@ -29,4 +29,9 @@ public enum PaymentOperationType
     /// Refund after settlement.
     /// </summary>
     Refund = 5,
+
+    /// <summary>
+    /// Wallet-to-wallet transfer.
+    /// </summary>
+    Transfer = 6,
 }

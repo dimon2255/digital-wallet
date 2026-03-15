@@ -54,4 +54,9 @@ public sealed class BitcoinOptions
     /// Gets or sets the regtest RPC password.
     /// </summary>
     public string? RpcPassword { get; set; }
+
+    /// <summary>
+    /// Gets or sets the transfer mode (auto, onchain, internal).
+    /// </summary>
+    public string TransferMode { get; set; } = "auto";
 }

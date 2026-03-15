@@ -33,6 +33,15 @@ public interface ITransactionRepository
     Task<IReadOnlyCollection<PaymentTransaction>> ListPendingAsync(CancellationToken cancellationToken);
 
     /// <summary>
+    /// Lists transactions for wallets owned by a user, with pagination.
+    /// </summary>
+    Task<(IReadOnlyCollection<PaymentTransaction> Items, int TotalCount)> ListByWalletIdsAsync(
+        IReadOnlyCollection<Guid> walletIds,
+        int page,
+        int pageSize,
+        CancellationToken cancellationToken);
+
+    /// <summary>
     /// Updates a transaction.
     /// </summary>
     Task UpdateAsync(PaymentTransaction transaction, CancellationToken cancellationToken);
