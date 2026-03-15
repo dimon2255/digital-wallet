@@ -1,5 +1,7 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useTransactions } from '../hooks/useTransactions';
+import { useWallets } from '../hooks/useWallets';
 import { formatSats, formatDate, shortTxId } from '../lib/formatters';
 import StateBadge from '../components/common/StateBadge';
 import { ChevronLeft, ChevronRight, ExternalLink, Inbox } from 'lucide-react';
@@ -8,8 +10,11 @@ export default function Transactions() {
   const [page, setPage] = useState(1);
   const pageSize = 10;
   const { data, isLoading } = useTransactions(page, pageSize);
+  const { data: wallets } = useWallets();
 
   const totalPages = data ? Math.ceil(data.totalCount / pageSize) : 0;
+
+  const walletName = (id: string) => wallets?.find((w) => w.id === id)?.name || id.slice(0, 8) + '...';
 
   return (
     <div>
@@ -58,9 +63,11 @@ export default function Transactions() {
         ) : (
           <>
             {/* Table header */}
-            <div className="hidden sm:grid grid-cols-[1fr_auto_1fr_1fr_1.2fr_1fr] gap-2 px-6 py-3 text-xs font-medium text-zinc-600 uppercase tracking-wider border-b border-zinc-800/50" style={{ fontFamily: 'var(--font-body)' }}>
+            <div className="hidden sm:grid grid-cols-[0.6fr_0.85fr_0.75fr_0.75fr_0.7fr_0.5fr_0.95fr_0.75fr] gap-4 px-6 py-3 text-xs font-medium text-zinc-600 uppercase tracking-wider border-b border-zinc-800/50" style={{ fontFamily: 'var(--font-body)' }}>
               <span>Type</span>
               <span>State</span>
+              <span>From</span>
+              <span>To</span>
               <span className="text-right">Amount</span>
               <span className="text-right">Fee</span>
               <span>Tx ID</span>
@@ -70,9 +77,10 @@ export default function Transactions() {
             {/* Rows */}
             <div>
               {data.items.map((tx, i) => (
-                <div
+                <Link
                   key={tx.id}
-                  className={`grid grid-cols-1 sm:grid-cols-[1fr_auto_1fr_1fr_1.2fr_1fr] gap-2 items-center px-6 py-3.5 hover:bg-zinc-800/20 transition-colors ${
+                  to={`/transactions/${tx.id}`}
+                  className={`grid grid-cols-1 sm:grid-cols-[0.6fr_0.85fr_0.75fr_0.75fr_0.7fr_0.5fr_0.95fr_0.75fr] gap-4 items-center px-6 py-3.5 hover:bg-zinc-800/20 transition-colors cursor-pointer ${
                     i < data.items.length - 1 ? 'border-b border-zinc-800/30' : ''
                   }`}
                 >
@@ -88,6 +96,24 @@ export default function Transactions() {
                   <div>
                     <StateBadge state={tx.state} />
                   </div>
+
+                  {/* From */}
+                  <span
+                    className="text-xs text-zinc-400 truncate"
+                    style={{ fontFamily: 'var(--font-body)' }}
+                    title={tx.buyerWalletId}
+                  >
+                    {walletName(tx.buyerWalletId)}
+                  </span>
+
+                  {/* To */}
+                  <span
+                    className="text-xs text-zinc-400 truncate"
+                    style={{ fontFamily: 'var(--font-body)' }}
+                    title={tx.merchantWalletId}
+                  >
+                    {walletName(tx.merchantWalletId)}
+                  </span>
 
                   {/* Amount */}
                   <span
@@ -109,16 +135,13 @@ export default function Transactions() {
                   <div>
                     {tx.bitcoinTxId ? (
                       tx.explorerUrl ? (
-                        <a
-                          href={tx.explorerUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="inline-flex items-center gap-1 text-amber-400 hover:text-amber-300 text-xs transition-colors"
+                        <span
+                          className="inline-flex items-center gap-1 text-amber-400 text-xs"
                           style={{ fontFamily: 'var(--font-mono)' }}
                         >
                           {shortTxId(tx.bitcoinTxId)}
                           <ExternalLink size={11} />
-                        </a>
+                        </span>
                       ) : (
                         <span className="text-xs text-zinc-500" style={{ fontFamily: 'var(--font-mono)' }}>
                           {shortTxId(tx.bitcoinTxId)}
@@ -136,7 +159,7 @@ export default function Transactions() {
                   >
                     {formatDate(tx.createdAt)}
                   </span>
-                </div>
+                </Link>
               ))}
             </div>
 

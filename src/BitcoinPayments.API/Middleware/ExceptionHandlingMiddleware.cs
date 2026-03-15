@@ -28,6 +28,27 @@ public sealed class ExceptionHandlingMiddleware
         {
             await next(context);
         }
+        catch (OperationCanceledException) when (context.RequestAborted.IsCancellationRequested)
+        {
+            // Client disconnected — nothing to write, just abort silently
+            logger.LogDebug("Request aborted by client: {Method} {Path}.", context.Request.Method, context.Request.Path);
+            return;
+        }
+        catch (BadHttpRequestException ex)
+        {
+            // Malformed or truncated request body from client
+            logger.LogWarning("Bad request from client: {Method} {Path} — {Message}", context.Request.Method, context.Request.Path, ex.Message);
+            if (!context.Response.HasStarted)
+            {
+                context.Response.StatusCode = StatusCodes.Status400BadRequest;
+                context.Response.ContentType = "application/json";
+                await context.Response.WriteAsJsonAsync(new
+                {
+                    error = new { code = "BAD_REQUEST", message = "The request was malformed or incomplete." },
+                });
+            }
+            return;
+        }
         catch (Exception exception)
         {
             logger.LogError(exception, "Unhandled exception while processing {Method} {Path}.", context.Request.Method, context.Request.Path);

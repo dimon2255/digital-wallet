@@ -8,8 +8,9 @@ import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import Wallets from './pages/Wallets';
 import WalletDetail from './pages/WalletDetail';
-import Send from './pages/Send';
+import PaymentsPage from './pages/PaymentsPage';
 import Transactions from './pages/Transactions';
+import TransactionDetail from './pages/TransactionDetail';
 import SettingsPage from './pages/SettingsPage';
 
 const queryClient = new QueryClient({
@@ -39,8 +40,10 @@ function AppRoutes() {
         <Route path="/" element={<Dashboard />} />
         <Route path="/wallets" element={<Wallets />} />
         <Route path="/wallets/:id" element={<WalletDetail />} />
-        <Route path="/send" element={<Send />} />
+        <Route path="/payments" element={<PaymentsPage />} />
+        <Route path="/send" element={<Navigate to="/payments?tab=transfer" replace />} />
         <Route path="/transactions" element={<Transactions />} />
+        <Route path="/transactions/:id" element={<TransactionDetail />} />
         <Route path="/settings" element={<SettingsPage />} />
       </Route>
       <Route path="*" element={<Navigate to="/" replace />} />

@@ -68,7 +68,22 @@ public sealed class IdempotencyMiddleware
         await using var memoryStream = new MemoryStream();
         context.Response.Body = memoryStream;
 
-        await next(context);
+        try
+        {
+            await next(context);
+        }
+        catch (BadHttpRequestException)
+        {
+            // Client disconnected or sent truncated body — restore stream and rethrow
+            context.Response.Body = originalBody;
+            throw;
+        }
+        catch (OperationCanceledException) when (context.RequestAborted.IsCancellationRequested)
+        {
+            // Request was aborted by the client — restore stream and rethrow
+            context.Response.Body = originalBody;
+            throw;
+        }
 
         memoryStream.Position = 0;
         var responseBody = await new StreamReader(memoryStream, Encoding.UTF8).ReadToEndAsync(context.RequestAborted);

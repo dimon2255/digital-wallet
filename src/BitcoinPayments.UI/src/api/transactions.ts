@@ -12,6 +12,8 @@ export interface TransactionResponse {
   createdAt: string;
   updatedAt: string;
   errorMessage: string | null;
+  buyerWalletId: string;
+  merchantWalletId: string;
 }
 
 export interface PagedResult<T> {

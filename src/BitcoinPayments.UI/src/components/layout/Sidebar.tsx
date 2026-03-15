@@ -1,11 +1,11 @@
 import { Link, useLocation } from 'react-router-dom';
-import { LayoutDashboard, Wallet, ArrowLeftRight, History, Settings, LogOut } from 'lucide-react';
+import { LayoutDashboard, Wallet, Zap, History, Settings, LogOut } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
 
 const links = [
   { to: '/', label: 'Dashboard', icon: LayoutDashboard },
   { to: '/wallets', label: 'Wallets', icon: Wallet },
-  { to: '/send', label: 'Send', icon: ArrowLeftRight },
+  { to: '/payments', label: 'Payments', icon: Zap },
   { to: '/transactions', label: 'History', icon: History },
   { to: '/settings', label: 'Settings', icon: Settings },
 ];

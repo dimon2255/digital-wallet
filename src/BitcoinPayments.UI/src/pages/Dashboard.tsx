@@ -129,9 +129,10 @@ export default function Dashboard() {
         ) : (
           <div>
             {txPage.items.map((tx, i) => (
-              <div
+              <Link
                 key={tx.id}
-                className={`flex items-center justify-between px-6 py-3.5 hover:bg-zinc-800/30 transition-colors ${
+                to={`/transactions/${tx.id}`}
+                className={`flex items-center justify-between px-6 py-3.5 hover:bg-zinc-800/30 transition-colors cursor-pointer ${
                   i < txPage.items.length - 1 ? 'border-b border-zinc-800/50' : ''
                 }`}
               >
@@ -163,7 +164,7 @@ export default function Dashboard() {
                     {formatSats(tx.amountSatoshis)}
                   </span>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
         )}
