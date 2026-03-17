@@ -1,4 +1,4 @@
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link } from 'react-router';
 import { QRCodeSVG } from 'qrcode.react';
 import { ArrowLeft, Copy, Send, Wallet, Hash } from 'lucide-react';
 import { useWallet, useWalletAddress } from '../hooks/useWallets';

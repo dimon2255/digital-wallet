@@ -65,7 +65,18 @@ docker-compose.override.yml
 src/BitcoinPayments.UI/node_modules/
 src/BitcoinPayments.UI/dist/
 
-## Playwright screenshots
-transactions-table*.png
-page-*.png
-page-*.jpeg
+## Images (except docs/)
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.bmp
+*.ico
+*.svg
+*.webp
+!docs/**/*.png
+!docs/**/*.jpg
+!docs/**/*.jpeg
+!docs/**/*.gif
+!docs/**/*.svg
+!docs/**/*.webp

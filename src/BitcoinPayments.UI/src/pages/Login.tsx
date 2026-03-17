@@ -1,5 +1,5 @@
 import { useState, useRef, useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import { useAuth } from '../hooks/useAuth';
 import { login, register, demoLogin } from '../api/auth';
 import toast from 'react-hot-toast';

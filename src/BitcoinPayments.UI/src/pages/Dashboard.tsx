@@ -3,7 +3,7 @@ import { useWallets } from '../hooks/useWallets';
 import { useTransactions } from '../hooks/useTransactions';
 import { formatSats, formatDate } from '../lib/formatters';
 import StateBadge from '../components/common/StateBadge';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 
 const stats = [
   {

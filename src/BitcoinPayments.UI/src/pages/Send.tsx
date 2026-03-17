@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useSearchParams, useNavigate } from 'react-router-dom';
+import { useSearchParams, useNavigate } from 'react-router';
 import { useWallets } from '../hooks/useWallets';
 import { useCreateTransfer } from '../hooks/useTransfers';
 import { formatSats } from '../lib/formatters';
