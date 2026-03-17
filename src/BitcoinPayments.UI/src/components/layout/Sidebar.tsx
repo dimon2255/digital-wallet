@@ -1,4 +1,4 @@
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router';
 import { LayoutDashboard, Wallet, Zap, History, Settings, LogOut } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
 

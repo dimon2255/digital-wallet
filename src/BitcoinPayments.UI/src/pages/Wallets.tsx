@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { Plus, Wallet as WalletIcon, ArrowRight, X } from 'lucide-react';
 import { useWallets, useCreateWallet } from '../hooks/useWallets';
 import { formatSats, formatDate } from '../lib/formatters';
